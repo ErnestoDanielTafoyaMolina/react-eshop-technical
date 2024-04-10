@@ -1,16 +1,25 @@
-import { useEffect } from "react"
-import ProductsApi from "../../api/axios"
-
-
-
+import { useEffect } from "react";
+import { ProductsComponent } from "../components";
+import { useFetchProducts } from "../hooks/useFetchProducts";
 
 export const EshopMain = () => {
+  const { products, fetchProducts, isLoading } = useFetchProducts(); // Corrección aquí
+
   useEffect(() => {
-  ProductsApi.get("/").then(res => console.log(res.data))
-  }, [])
+    fetchProducts(); // Corrección aquí
+  }, []); // Corrección aquí
+
   return (
     <>
-        <h2>Main page</h2>
+      <div className="row d-flex justify-content-center gap-3 p-3">
+        {!isLoading ? (
+          products.map((product) => ( // Corrección aquí
+            <ProductsComponent key={product.id} {...product} />
+          ))
+        ) : (
+          "Loading..."
+        )}
+      </div>
     </>
-  )
-}
+  );
+};
